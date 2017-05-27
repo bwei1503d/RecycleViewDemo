@@ -8,6 +8,7 @@ import com.aspsine.irecyclerview.IRecyclerView;
 import com.aspsine.irecyclerview.OnLoadMoreListener;
 import com.aspsine.irecyclerview.OnRefreshListener;
 import com.bwei.recycleviewdemo.recycleview.LoadMoreFooterView;
+import com.bwei.recycleviewdemo.utils.NetUtil;
 import com.google.gson.Gson;
 
 import org.xutils.ex.DbException;
@@ -43,6 +44,14 @@ public class OkActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ok);
+
+
+        //启动没有网络
+        if(!NetUtil.isNetworkAvailable(getApplication())){
+
+            NetUtil.toSystemSetting(this);
+        }
+
 
         application = (IApplication) getApplication() ;
         iRecyclerView = (IRecyclerView) findViewById(R.id.recycleview_idok);
@@ -90,6 +99,9 @@ public class OkActivity extends Activity {
         });
 
 
+
+
+
     }
 
 
@@ -122,7 +134,10 @@ public class OkActivity extends Activity {
                         final Beans beans = new Gson().fromJson(result,Beans.class);
 
 
-                        getDb(application.dbDao()).save(beans.getList());
+                        if(NetUtil.GetNetype(getApplicationContext()).equals("WIFI")){
+                            getDb(application.dbDao()).save(beans.getList());
+
+                        }
 
                         runOnUiThread(new Runnable() {
                             @Override

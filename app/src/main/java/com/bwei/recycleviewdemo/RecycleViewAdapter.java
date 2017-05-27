@@ -25,7 +25,6 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     public RecycleViewAdapter(Context context,List<String> mDatas){
         this.context = context ;
         this.mDatas = mDatas;
-
     }
 
     @Override
@@ -39,15 +38,20 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     public void onBindViewHolder(IViewHolder holder,final  int position) {
 
 
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.textView.getLayoutParams() ;
+//        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.textView.getLayoutParams() ;
 
 //        params.width = 100 ;
-//        params.height = params.height + new Random().nextInt(100);
+//        params.height = LinearLayout.LayoutParams.WRAP_CONTENT;
 //        holder.textView.setLayoutParams(params);
-
+//
 //        holder.textView.setBackgroundColor(Color.BLUE);
 
-        holder.textView.setText(mDatas.get(position));
+        if(position %2 ==0){
+            holder.textView.setBackgroundColor(Color.GRAY);
+        } else {
+            holder.textView.setBackgroundColor(Color.BLUE);
+        }
+        holder.textView.setText(mDatas.get(position) + " -- " + position);
 
 
         holder.textView.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +68,8 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                 return false;
             }
         });
+
+
 
     }
 
@@ -82,6 +88,19 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
          }
 
      }
+
+    public void addData(int position) {
+        mDatas.add(position, "Insert One");
+        notifyItemInserted(position);
+        notifyItemRangeChanged(position,mDatas.size());
+
+    }
+
+    public void removeData(int position) {
+        mDatas.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position,mDatas.size());
+    }
 
      public interface OnItemClickListener{
          void onItemClickListener(View view,int position);

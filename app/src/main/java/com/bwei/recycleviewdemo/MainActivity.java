@@ -7,6 +7,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Gravity;
 import android.view.View;
@@ -14,6 +15,8 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.OkHttpClient;
 
 public class MainActivity extends Activity implements RecycleViewAdapter.OnItemClickListener {
 
@@ -38,12 +41,12 @@ public class MainActivity extends Activity implements RecycleViewAdapter.OnItemC
 
         adapter = new RecycleViewAdapter(this,mDatas) ;
 
-        setLinearLayoutManagerHORIZONTAL_LIST();
+        setLinearLayoutManagerVERTICAL_LIST();
 
 
         adapter.setOnItemClickListener(this);
 
-        startActivity(new Intent(this,RecycleViewActivity.class));
+        startActivity(new Intent(this, OkActivity.class));
 
 
     }
@@ -59,7 +62,11 @@ public class MainActivity extends Activity implements RecycleViewAdapter.OnItemC
 
         recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL_LIST));
 
+
+
+
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
     }
 
 
@@ -95,17 +102,23 @@ public class MainActivity extends Activity implements RecycleViewAdapter.OnItemC
     }
 
 
-    private void add(){
+    private void add(int position){
+        System.out.println("onItemClickListener view = "  +  " position  " + position + " -- " + mDatas.size());
 
-        mDatas.add(0,"aaa");
-        adapter.notifyDataSetChanged();
+        mDatas.add(position," " + position);
 
+        adapter.notifyItemInserted(position);
+//        adapter.notifyDataSetChanged();
+        System.out.println("onItemClickListener view = "  +  " position 1 " + mDatas.size());
 
     }
-    private void remove(){
 
-        mDatas.remove(0);
-        adapter.notifyDataSetChanged();
+    private void remove(int position){
+        System.out.println("onItemClickListener view = "  +  " position  " + position + " -- " + mDatas.size());
+        mDatas.remove(position);
+        adapter.notifyItemRemoved(position);
+        System.out.println("onItemClickListener view = "  +  " position 1 " + mDatas.size());
+
     }
 
 
@@ -113,10 +126,8 @@ public class MainActivity extends Activity implements RecycleViewAdapter.OnItemC
     @Override
     public void onItemClickListener(View view, int position) {
 
-        System.out.println("onItemClickListener view = " + view +  " position " + position);
 
-        mDatas.remove(position);
-        adapter.notifyDataSetChanged();
+        adapter.addData(position);
 
     }
 
